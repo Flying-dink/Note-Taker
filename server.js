@@ -5,7 +5,7 @@ const {v4} = require("uuid");
 //Get Route
 
 router.get("./notes",(req,res) => {
-    readFile("./db/db.json","utf8",function (err,data)  {
+    readFile("./db/db.json","utf8", function (err,data)  {
         let noteData = [];
         if (err) {
             throw err;
@@ -25,7 +25,7 @@ router.get("./notes",(req,res) => {
 router.post("/notes", {req ,res} => {
     let newNote = req.body;
     
-    readFile("./bd/bd.json", "utf8", (err, data) => {
+    readFile("./db/db.json", "utf8", (err, data) =>  {
         if (err) {
             console.log(`err at the database ${err}`);
         } else {
@@ -63,4 +63,31 @@ router.post("/notes", {req ,res} => {
         }
     });
 }};
+
+//Delete Route
+
+router.delete("/notes/:id",(req,res) => {
+    readFile("./db/db.json", "utf8", (err,data) => {
+        if (err) {
+            throw err;
+        }
+        let objNew = JSON.parse(data);  
+        //parses db. json into mutable json format
+        const deleteThis = objNew.findeIndex((note) => note.id ===req.params.id);
+        //searches db for matching note id, retuens its index
+        objNew.splice(deleteThis,1); //deletes that specific  note object from array of note objects
+        const output = writeFile("./db/db.json", JSON. stringify(objNew), (err) => {
+            if (err) {
+                throw err;
+
+            }
+            console.log("Note rewritten");
+
+        });
+        res.send(output); 
+        //send the rewritten file as response
+
+
+    });
+});
 
