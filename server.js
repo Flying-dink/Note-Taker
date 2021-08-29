@@ -1,9 +1,40 @@
 const router = require("express").Router();
 const { readFile, writeFile } = require("fs");
 const { v4 } = require("uuid");
-const {join} = require("path");
-//Get Route
+const { join } = require("path");
 
+//Html Route
+
+const PORT = process.env.PORT || 3005;
+const app = express();
+const apiRoutes = require("./routes/apiRoutes/index.js");
+const htmlRoutes = require("./routes/htmlRoutes/index.js");
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(join(__dirname, "public")));
+
+app.use("/api", apiRoutes);
+app.use("/", htmlRoutes);
+app.listen(PORT, () => {
+  console.log('App listening on port: ${PORT}');
+});
+
+//Html route
+router.get("/", (req, res) => {
+  res.sendFile(join(_dirname, "../..public/index.html"));
+});
+
+router.get("/notes", (req, res) => {
+  res.sendFile(join(_dirname, "../../public/notes.html"));
+});
+
+router.get("*", (req, res) => {
+  res.sendFile(join(_dirname, "../..public/notes.html"));
+});
+
+
+//Get Route
 router.get("./notes", (req, res) => {
   readFile("./db/db.json", "utf8", function (err, data) {
     let noteData = [];
@@ -19,8 +50,7 @@ router.get("./notes", (req, res) => {
     }
   });
 });
-
-//Post Route
+//post Route
 router.post("/notes", (req, res) => {
   let newNote = req.body;
 
@@ -72,7 +102,7 @@ router.delete("/notes/:id", (req, res) => {
     let objNew = JSON.parse(data);
     //parses db. json into mutable json format
     const deleteThis = objNew.findIndex((note) => note.id === req.params.id);
-    //searches db for matching note id, retuens its index
+    //searches db for matching note id, returns its index
     objNew.splice(deleteThis, 1); //deletes that specific  note object from array of note objects
     const output = writeFile("./db/db.json", JSON.stringify(objNew), (err) => {
       if (err) {
@@ -83,45 +113,6 @@ router.delete("/notes/:id", (req, res) => {
     res.send(output);
     //send the rewritten file as response
   });
-});
-
-
-
-
-
-//Html Route
-
-const PORT = process.env.PORT || 3005;
-const app = express();
-const apiRoutes = require("./routes/apiRoutes/index.js");
-const htmlRoutes = require("./routes/htmlRoutes/index.js");
-
-app.use(express.urlencoded({extended:true}));
-app.use(express.json());
-app.use(express.static(join(__dirname,"public")));
-
-
-app.use("/api", apiRoutes);
-app.use("/",htmlRoutes);
-app.listen(PORT, () => {
-console.log('App listening on port: ${PORT}');
-});
-
-
-//Html route
-router.get("/", (req,res) => {
-console.log("Hello");
-res.sendFile(join(_dirname, "../..public/notes.html"));
-});
-
-router.get("/notes",(req,res) => {
-res.sendFile(join(_dirname, "../../public/notes.html"));
-});
-
-router.get("*",(req,res) => {
-  console.log("done");
-  res.sendFile(join(_dirname,"../..public/notes.html"));
-
 });
 
 module.exports = router;
