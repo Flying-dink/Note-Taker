@@ -1,6 +1,6 @@
 # Note Taker App
 
-# Desrciption
+# Desription
 An app that one can take and save notes with
 
 # Installation
