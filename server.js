@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { readFile, writeFile } = require("fs");
 const { v4 } = require("uuid");
-
+const {join} = require("path");
 //Get Route
 
 router.get("./notes", (req, res) => {
@@ -84,3 +84,20 @@ router.delete("/notes/:id", (req, res) => {
     //send the rewritten file as response
   });
 });
+
+router.get("/", (req,res) => {
+console.log("Hello");
+res.sendFile(join(_dirname, "../..public/notes.html"));
+});
+
+router.get("/notes",(req,res) => {
+res.sendFile(join(_dirname, "../../public/notes.html"));
+});
+
+router.get("*",(req,res) => {
+  console.log("done");
+  res.sendFile(join(_dirname,"../..public/notes.html"));
+
+});
+
+module.exports = router;
