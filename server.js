@@ -1,4 +1,4 @@
-const router = require("express").Router();
+//const router = require("express").Router();
 const { readFile, writeFile } = require("fs");
 const { v4 } = require("uuid");
 const { join } = require("path");
@@ -21,19 +21,19 @@ app.use(express.static(join(__dirname, "public")));
 
 
 //Html route
-router.get("/", (req, res) => {
-  res.sendFile(join(_dirname, "../../public/index.html"));
+app.get("/", (req, res) => {
+  res.sendFile(join(__dirname, "./public/index.html"));
 });
 
-router.get("/notes", (req, res) => {
-  res.sendFile(join(_dirname, "../../public/notes.html"));
+app.get("/notes", (req, res) => {
+  res.sendFile(join(__dirname, "./public/notes.html"));
 });
 
 
 
 
 //Get Route
-router.get("./notes", (req, res) => {
+app.get("/api/notes", (req, res) => {
   readFile("./db/db.json", "utf8", function (err, data) {
     let noteData = [];
     if (err) {
@@ -49,7 +49,7 @@ router.get("./notes", (req, res) => {
   });
 });
 //post Route
-router.post("/notes", (req, res) => {
+app.post("/notes", (req, res) => {
   let newNote = req.body;
 
   readFile("./db/db.json", "utf8", (err, data) => {
@@ -92,7 +92,7 @@ router.post("/notes", (req, res) => {
 
 //Delete Route
 
-router.delete("/notes/:id", (req, res) => {
+app.delete("/notes/:id", (req, res) => {
   readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
       throw err;
@@ -113,8 +113,8 @@ router.delete("/notes/:id", (req, res) => {
   });
 }); 
 
-router.get("*", (req, res) => {
-  res.sendFile(join(_dirname, "../../public/notes.html"));
+app.get("*", (req, res) => {
+  res.sendFile(join(__dirname, "./public/notes.html"));
 });
 
 
@@ -122,4 +122,3 @@ app.listen(PORT, () => {
   console.log(`App listening on port: ${PORT}`);
 });
 
-module.exports = router;
