@@ -1,36 +1,7 @@
 const router = require("express").Router();
-const { readFile, writeFile } = require("fs");
-const { v4 } = require("uuid");
-const { join } = require("path");
-const express = require("express");
-
-//Html Route
-
-const PORT = process.env.PORT || 3005;
-const app = express();
-const apiRoutes = require("./routes/apiRoutes/index.js");
-const htmlRoutes = require("./routes/htmlRoutes/index.js");
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static(join(__dirname, "public")));
-
-app.use("/api", apiRoutes);
-app.use("/", htmlRoutes);
-
-
-
-//Html route
-router.get("/", (req, res) => {
-  res.sendFile(join(_dirname, "../../public/index.html"));
-});
-
-router.get("/notes", (req, res) => {
-  res.sendFile(join(_dirname, "../../public/notes.html"));
-});
-
-
-
+const {readFile, writeFile} = require("fs");;
+const {v4} = require ("uuid");
+const {join} =require("path");
 
 //Get Route
 router.get("./notes", (req, res) => {
@@ -111,15 +82,6 @@ router.delete("/notes/:id", (req, res) => {
     res.send(output);
     //send the rewritten file as response
   });
-}); 
-
-router.get("*", (req, res) => {
-  res.sendFile(join(_dirname, "../../public/notes.html"));
-});
-
-
-app.listen(PORT, () => {
-  console.log(`App listening on port: ${PORT}`);
 });
 
 module.exports = router;
