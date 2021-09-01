@@ -4,7 +4,9 @@
 
 
 # Description
-An app that one can take and save notes with
+An app that one can take and save notes with.
+
+#  Heroku Link
 https://git.heroku.com/note-taker-app-2021.git# Heroku Link
 
 # Installation
