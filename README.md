@@ -7,7 +7,7 @@
 An app that one can take and save notes with.
 
 #  Heroku Link
-https://git.heroku.com/note-taker-app-2021.git# Heroku Link
+ https://note-taker-app-2021.herokuapp.com/
 
 # Installation
 NPM 
